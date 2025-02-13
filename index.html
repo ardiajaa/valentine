@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kartu Ucapan Untuk Kekasihku</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/g5CmzQS.png">
+    <link href="https://fonts.googleapis.com/css2?family=Delicious+Handrawn&display=swap" rel="stylesheet">
+    <style>
+        body {
+            
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            margin: 0;
+            font-family: 'Pacifico', cursive;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: float 5s infinite ease-in-out;
+        }
+        
+        @media (max-width: 768px) {
+    #video-bg {
+        width: 150vw;
+        height: 100vh;
+    }
+}
+
+
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        .reload-gif {
+            display: none;
+        }
+
+
+        .start-screen {
+            text-align: center;
+        }
+        .start-screen h1 {
+            font-family: 'Delicous', cursive;
+            color: #ff6f61;
+            background: white;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .start-screen p {
+            font-size: 1.2rem;
+            color: #faf8f8;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 350px;
+            height: 450px;
+            overflow: hidden;
+            display: none;
+            justify-content: flex-start;
+           
+        }
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slide {
+            min-width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+       .slide-container {
+    width: 150px;
+    height: 260px;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: 3px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    text-align: center;
+    justify-content: center; 
+    padding-left: 10px;
+    margin-left: 60px;
+    transform: translate(30px);
+    
+}
+
+.slides .slide img {
+    width: 100%;
+    height: 85%;
+    object-fit: contain;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+
+.caption {
+    font-size: 14px;
+    color: #ff6f61;
+    margin-top: 5px;
+    padding: 5px;
+}
+
+
+        .buttons {
+            text-align: center;
+            margin-top: 10px;
+        }
+        button {
+            background-color: #ff9aa2;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: transform 0.2s;
+        }
+        button:active {
+            transform: scale(0.9);
+        }
+        #messageBox, #alertBox {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+        }
+
+        .heart {
+    position: absolute;
+    color: red;
+    font-size: 20px;
+    opacity: 0;
+    animation: fall 3s linear infinite, fadeInOut 3s linear infinite;
+}
+
+.footer-container {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    padding: 5px;
+    background: rgba(0, 0, 0, 0.5);
+    font-size: 10px;
+    font-weight: normal;
+    color: white;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+
+
+
+@keyframes fall {
+    0% { transform: translateY(-10vh) scale(1); }
+    100% { transform: translateY(100vh) scale(1.5); }
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+#video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+}
+
+    </style>
+</head>
+
+<script>
+    function createHeart() {
+        const heart = document.createElement("div");
+        heart.innerHTML = "❤️";
+        heart.classList.add("heart");
+        
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.top = "-10vh";
+        heart.style.fontSize = Math.random() * 20 + 10 + "px";
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 3000);
+    }
+
+    setInterval(createHeart, 500);
+
+    function updateSlide() {
+    slidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+    sendMessageBtn.style.display = (currentIndex === 7) ? "block" : "none";
+
+    document.getElementById("messageBox").style.display = (currentIndex === 7) ? "block" : "none";
+
+    if (currentIndex !== 7) {
+        document.getElementById("message").value = "";
+    }
+}
+</script>
+<body>
+    <video id="video-bg" autoplay loop muted>
+        <source src="https://media-hosting.imagekit.io//cd0b95407bde463a/Pink%20Illustrative%20Valentine's%20Day%20Greeting%20Instagram%20Story.mp4?Expires=1833942727&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=W9H8xGDyq7~ovHDp2UZd7WLom3GJsureSrKXTMo5MiUjd37TD-qcLQj8wTR1bDpMLZG97MJ973eV1WqEYuL2p8Vv9PKVKVHFu4-rV6ctM1rjhYAijchTSmp5izGEFGIi09jiPgIxnpzHjcfYU-XLDCVdJyzpFfp4geFgdBr7JyJ4YQXkstX0hi2vkmhU9swgctunSCR8qSJd~xburBHiNGaXe8CMPDBf6DNNWmohiFu7NaHWjMIajha4MnlsS-6T9MqaoL8T71MoKHtPILlYpuqnp0ic1dNbcbo398eqwuCBexsslJwtgh30yVPfmJmkD-5lo0jcKP2IvEgs~3uCZQ__" 
+        type="video/mp4">
+    </video>
+    
+    <audio id="clickSound">
+        <source src="sound.mp3" type="audio/mpeg">
+    </audio>
+    
+
+    <audio id="bg-music" loop>
+        <source src="sailor.mp3" type="audio/mpeg">
+    </audio>
+    
+    <div class="start-screen">
+        <h1 onclick="startSlider()">❤️</h1>
+        <p>Klik Love Nya</p>
+    </div>
+
+    <div class="slider-container">
+        <div class="slides" id="slides">
+            <script>
+                let slidesContent = "";
+                let slideImages = [
+                    "https://tse3.mm.bing.net/th?id=OIP.iKaCH6YY3I6dstRp6YDUcAHaKY&pid=Api&P=0&h=220",
+                    "https://teknogram.id/gallery/stiker-wa/kartun-bergerak/stiker-kartun-bergerak-3.png",
+                    "https://i.pinimg.com/originals/c9/df/49/c9df490cbf975f90c46ec592cef63db3.png",
+                    "https://lh6.googleusercontent.com/proxy/rJ1i2UXCJq3kb_1DljOTQayAB4dbuexpJmlo-NlA_4WOTqHJj-B2BIHJytgtp5G1fXBEhCoTot5B3udcFZNZZsVVGQg06zaloqvL6r2hZKmsHoU5YqLRWkAdGclUvkarZkMp6uXocZ8M16dx8YIry9d41TqaaqWJX1Z6KUUt-81Tzg=s0-d",
+                    "https://teknogram.id/gallery/stiker-wa/kartun-bergerak/stiker-kartun-bergerak-3.png",
+                    "https://png.pngtree.com/png-vector/20231230/ourmid/pngtree-mobile-phone-with-gift-boxes-and-hearts-valentines-day-concept-png-image_11242903.png",
+                    "https://sdl-stickershop.line.naver.jp/stickershop/v1/sticker/110120566/IOS/sticker_animation@2x.png",
+                    "https://static.vecteezy.com/system/resources/previews/011/026/717/original/cute-teddy-bear-love-set-valentines-day-with-elements-filled-vector-free-png.png"
+                ];
+                
+                let slideCaptions = [
+                    "Happy Valentine’s Day! ❤️",
+                    "Terima kasih sudah jadi bagian hidupku 😊",
+                    "Setiap hari bersamamu itu hadiah terindah 🎁",
+                    "Kamu adalah alasan aku tersenyum 😊💕",
+                    "Aku bersyukur punya kamu di hidupku 💖",
+                    "Cintaku untukmu nggak akan habis 💞",
+                    "Semoga kita selalu bersama selamanya 🤗",
+                    "I love you! 💘"
+                ];
+            
+                for (let i = 0; i < 8; i++) {
+                    slidesContent += `
+                    <div class='slide'>
+                        <div class='slide-container'>
+                            <img src='${slideImages[i]}' alt='Slide ${i + 1}'>
+                            <p class='caption'>${slideCaptions[i]}</p>
+                        </div>
+                    </div>`;
+                }
+                document.write(slidesContent);
+            </script>
+            
+        </div>
+        <div class="buttons">
+            <center>
+            <button onclick="prevSlide()">&#9664;</button>
+            <button onclick="nextSlide()">&#9654;</button>
+            <button id="sendMessage" onclick="showMessageBox()" style="display:none;">Kirim Pesan</button>
+            </center>
+        </div>
+    </div> 
+
+    <div class="footer-container">
+    <p>&copy; 2025 Powered by Ardi.</p>
+</div>
+
+    <div id="messageBox">
+        <h3>Tulis pesan</h3>
+        <textarea id="message"></textarea>
+        <button onclick="sendMessage()">Kirim</button>
+    </div>
+
+    <div id="alertBox">
+        <img src="https://teknogram.id/gallery/stiker-wa/kartun-bergerak/stiker-kartun-bergerak-2.png" alt="Warning" width="100"><br>
+        <p>Jangan dikosongin dong!</p>
+        <button onclick="closeAlert()">OK</button>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        const slidesContainer = document.getElementById("slides");
+        const sendMessageBtn = document.getElementById("sendMessage");
+        const sliderContainer = document.querySelector(".slider-container");
+        const startScreen = document.querySelector(".start-screen");
+
+        function startSlider() {
+            startScreen.style.display = "none";
+            sliderContainer.style.display = "block";
+        }
+
+        function updateSlide() {
+            slidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+            sendMessageBtn.style.display = currentIndex === 7 ? "block" : "none";
+        }
+
+        function prevSlide() { 
+    if (currentIndex > 0) { 
+        currentIndex--; 
+        updateSlide(); 
+        document.getElementById("messageBox").style.display = "none";
+    } 
+}
+
+    const clickSound = document.getElementById("clickSound");
+
+function playClickSound() {
+    clickSound.currentTime = 0;
+    clickSound.play();
+}
+
+document.querySelectorAll("button").forEach(button => {
+    button.addEventListener("click", playClickSound);
+});
+
+
+
+        function prevSlide() { if (currentIndex > 0) { currentIndex--; updateSlide(); } }
+        function nextSlide() { if (currentIndex < 7) { currentIndex++; updateSlide(); } }
+
+        function showMessageBox() { document.getElementById("messageBox").style.display = "block"; }
+
+        function sendMessage() {
+            let message = document.getElementById("message").value.trim();
+            if (message === "") { document.getElementById("alertBox").style.display = "block"; }
+            else {
+                window.open(`https://wa.me/6285843978908?text=${encodeURIComponent(message)}`, "_blank");
+                document.getElementById("messageBox").style.display = "none";
+            }
+        }
+
+        function closeAlert() { document.getElementById("alertBox").style.display = "none"; }
+
+        document.addEventListener("DOMContentLoaded", function () {
+        document.body.addEventListener("click", function () {
+            document.getElementById("bg-music").play();
+        }, { once: true });
+    });
+    
+    </script>
+</body>
+</html>
